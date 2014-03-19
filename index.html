@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="js/react.js"></script>
     <script src="js/JSXTransformer.js"></script>
     <style type="text/css">
@@ -35,6 +36,14 @@
       var SigninForm = React.createClass({
         getInitialState: function() {
           return { nameValue: "", emailValue: "" };
+        },
+
+        postToMailchimp: function() {
+          
+        },
+        
+        updateForm: function() {
+          
         },
 
         handleSignin: function(event) {
