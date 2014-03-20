@@ -35,11 +35,18 @@
       
       var SigninForm = React.createClass({
         getInitialState: function() {
-          return { nameValue: "", emailValue: "" };
+          return { nameValue: "", emailValue: "", mailinglistValue:false };
         },
 
         postToMailchimp: function() {
-          
+          var mcURL = "http://techliminal.us2.list-manage.com/subscribe/post?u=9cfb95a838ce41c6f0fdcdb50&id=1bb1c53ed3";
+          $.ajax({
+          	url: mcURL,
+          	type:'POST',
+          	data: {
+          		EMAIL: this.state.emailValue
+          	}
+          });
         },
         
         updateForm: function() {
@@ -47,6 +54,7 @@
         },
 
         handleSignin: function(event) {
+        	if (this.state.mailinglistValue =='checked' ) { postToMailchimp();}
           alert("Sign in from "+this.state.nameValue+" <"+this.state.emailValue+">");
           return false;
         },
