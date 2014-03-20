@@ -5,29 +5,50 @@
     <script src="js/react.js"></script>
     <script src="js/JSXTransformer.js"></script>
     <style type="text/css">
+    
+    	* {
+				-webkit-box-sizing:border-box;
+				-moz-box-sizing:border-box;
+    		box-sizing:border-box;
+    	}
       body {
         font-family: Helvetica, Arial, sans-serif;
       }
       
       img.header {
-        padding-left: 37px;
+        margin:auto;
       }
       label.disabled {
         color: #ccc;
       }
       div#body {
-        width: 500px;
+        
         margin-left: auto;
         margin-right: auto;
+        width:75%;
+        text-align:center;
       }
       div#form {
+        width:75%;
         border: 1px solid #ccc;
         border-radius: 12px;
         padding: 30px 40px;
-        margin-top: 20px;
+        margin: 20px auto;
       }
+      
+      #form p label{
+      	text-align:left;
+      	display:block;
+      }
+      
       h1 {
         margin-top: 5px;
+      }
+      input[type="text"]{
+      	width:90%;
+      	display:block;
+      	padding:10px;
+      	font-size:1rem;
       }
       input[type="submit"] {
         border: 0;
@@ -112,9 +133,9 @@
           var hasName = this.state.nameValue.length > 0;
           
           return <form onSubmit={this.handleSignin} onChange={this.onChange}>
-            <h1>Welcome! Sign in:</h1>
-            <p>Name: <input onChange={this.handleNameChange} type="text" ref="name" value={this.state.nameValue} disabled={this.state.submitting} /></p>
-            <p>Email: <input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
+            <h1>Welcome! Please Sign in:</h1>
+            <p><label className="normal">Name: </label><input onChange={this.handleNameChange} type="text" ref="name" value={this.state.nameValue} disabled={this.state.submitting} /></p>
+            <p><label className="normal">Email: </label><input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
             <p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
             <p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
           </form>;
