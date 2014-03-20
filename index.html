@@ -48,6 +48,7 @@
 
         handleSignin: function(event) {
           alert("Sign in from "+this.state.nameValue+" <"+this.state.emailValue+">");
+          this.updateForm();
           return false;
         },
 
@@ -56,6 +57,9 @@
         },
         handleEmailChange: function(event) {
           this.setState({ emailValue: event.target.value });
+        },
+        handleCheckedChange: function(event) {
+          this.setState({ mailinglistValue: event.target.checked });
         },
         
         render: function() {
@@ -67,7 +71,7 @@
             <h1>Welcome! Sign in:</h1>
             Name: <input onChange={this.handleNameChange} type="text" value={this.state.nameValue} /><br />
             Email: <input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} /><br />
-            <label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={! validEmail } checked={this.state.mailinglistValue} /> Yes, please sign me up for updates from Tech Liminal!</label><br />
+            <label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label><br />
             <input type="submit" value="Sign in!" disabled={! hasName} />
           </form>;
         }
