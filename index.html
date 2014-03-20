@@ -54,7 +54,7 @@
         },
 
         handleSignin: function(event) {
-        	if (this.state.mailinglistValue =='checked' ) { postToMailchimp();}
+        	if (this.state.mailinglistValue ) { this.postToMailchimp();}
           alert("Sign in from "+this.state.nameValue+" <"+this.state.emailValue+">");
           this.updateForm();
           return false;
