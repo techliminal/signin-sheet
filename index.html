@@ -5,6 +5,10 @@
     <script src="js/react.js"></script>
     <script src="js/JSXTransformer.js"></script>
     <style type="text/css">
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+      
       label.disabled {
         color: #ccc;
       }
@@ -22,6 +26,17 @@
       h1 {
         margin-top: 5px;
       }
+      input[type="submit"] {
+        border: 0;
+        background: #68acdf;
+        border-radius: 3px;
+        padding: 8px 10px;
+        font-size: 100%;
+        color: white;
+      }
+      input[type="submit"]:disabled {
+        background: #abcdef;
+      }
     </style>
   </head>
   <body>
@@ -35,10 +50,10 @@
       
       var SigninForm = React.createClass({
         getInitialState: function() {
-          return { nameValue: "", emailValue: "", mailinglistValue:false };
+          return { nameValue: "", emailValue: "", mailinglistValue: false, submitting: false };
         },
 
-        postToMailchimp: function() {
+        postToMailchimp: function(cb) {
           var mcURL = "http://techliminal.us2.list-manage.com/subscribe/post?u=9cfb95a838ce41c6f0fdcdb50&id=1bb1c53ed3";
           $.ajax({
           	url: mcURL,
@@ -46,17 +61,35 @@
           	data: {
           		EMAIL: this.state.emailValue
           	}
-          });
+          }).always(cb);
         },
         
-        updateForm: function() {
-          
+        updateForm: function(cb) {
+          $.ajax({
+            url: 'https://docs.google.com/forms/d/1Qis5HBQWdByhgU5S_kDzDRyUvnFLXTbzAeu0tJPWZfI/formResponse',
+            method: "POST",
+            data: {
+              'entry.304838327': this.state.nameValue,
+              'entry.1508544992': this.state.emailValue,
+              'entry.2058622032': this.state.mailinglistValue ? 'Yes' : undefined
+            }
+          }).always(cb);
         },
 
         handleSignin: function(event) {
-        	if (this.state.mailinglistValue ) { this.postToMailchimp();}
-          alert("Sign in from "+this.state.nameValue+" <"+this.state.emailValue+">");
-          this.updateForm();
+          this.setState({submitting: true});
+          var self = this;
+          this.updateForm(function() {
+          	if (self.state.mailinglistValue) { 
+              self.postToMailchimp(function() {
+                self.setState(self.getInitialState());
+                self.refs.name.getDOMNode().focus();
+              });
+            } else {
+              self.setState(self.getInitialState());
+              self.refs.name.getDOMNode().focus();              
+            }
+          });
           return false;
         },
 
@@ -77,10 +110,10 @@
           
           return <form onSubmit={this.handleSignin} onChange={this.onChange}>
             <h1>Welcome! Sign in:</h1>
-            Name: <input onChange={this.handleNameChange} type="text" value={this.state.nameValue} /><br />
-            Email: <input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} /><br />
-            <label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label><br />
-            <input type="submit" value="Sign in!" disabled={! hasName} />
+            <p>Name: <input onChange={this.handleNameChange} type="text" ref="name" value={this.state.nameValue} disabled={this.state.submitting} /></p>
+            <p>Email: <input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
+            <p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
+            <p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
           </form>;
         }
       })
