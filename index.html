@@ -51,6 +51,13 @@
       /** @jsx React.DOM */
       var emailValidator = /^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i;
       
+      function todaysKey() {
+        var now = new Date();
+        return 'signin-data-'+[now.getFullYear(),
+                               ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()],
+                               now.getDate()].join(".");
+      }
+      
       var SigninForm = React.createClass({
         getInitialState: function() {
           return { nameValue: "", emailValue: "", mailinglistValue: false, submitting: false };
@@ -79,11 +86,28 @@
           }).always(cb);
         },
 
+        saveData: function(data) {
+          var key = todaysKey();
+          var dataList = JSON.parse(localStorage.getItem(key) || '[]');
+          var now = new Date();
+          dataList.push({
+            day: [now.getMonth()+1, now.getDate(), now.getFullYear()].join('/'),
+            time: [now.getHours(), ("0"+now.getMinutes()).substr(-2,2), ("0"+now.getSeconds()).substr(-2, 2)].join(':'),
+            name: data.nameValue,
+            email: data.emailValue,
+            newsletter: data.mailinglistVale
+          });
+          localStorage.setItem(key, JSON.stringify(dataList));
+          this.setProps({list: dataList});
+        },
+
         handleSignin: function(event) {
+          var data = this.state;
+          this.saveData(data);
           this.setState({submitting: true});
           var self = this;
           this.updateForm(function() {
-          	if (self.state.mailinglistValue) { 
+          	if (data.mailinglistValue) { 
               self.postToMailchimp(function() {
                 self.setState(self.getInitialState());
                 self.refs.name.getDOMNode().focus();
@@ -93,6 +117,7 @@
               self.refs.name.getDOMNode().focus();              
             }
           });
+          
           return false;
         },
 
@@ -117,11 +142,26 @@
             <p>Email: <input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
             <p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
             <p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Name</th><th>Email</th><th>Newsletter?</th></tr>
+              </thead>
+              <tbody>
+                {this.props.list.map(function(item) {
+                  return <tr>
+                           <td>{item.day}&nbsp;{item.time}</td>
+                           <td>{item.name}</td>
+                           <td>{item.email}</td>
+                           <td>{item.mailinglist ? 'Yes' : 'No'}</td>
+                         </tr>
+                })}
+              </tbody>
+            </table>
           </form>;
         }
       })
       React.renderComponent(
-        <SigninForm />,
+        <SigninForm list={JSON.parse(localStorage.getItem(todaysKey()))}/>,
         document.getElementById('form')
       );
     </script>
