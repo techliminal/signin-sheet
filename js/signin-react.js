@@ -8,7 +8,7 @@
 													 now.getDate()].join(".");
 	}
 	
-	var SigninForm = React.createClass({
+	var SigninForm = React.createClass({displayName: 'SigninForm',
 		getInitialState: function() {
 			return { nameValue: "", emailValue: "", mailinglistValue: false, submitting: false };
 		},
@@ -86,34 +86,34 @@
 			var labelClass = validEmail ? "" : "disabled";
 			var hasName = this.state.nameValue.length > 0;
 			
-			return <form onSubmit={this.handleSignin} onChange={this.onChange}>
-				<h1>Welcome! Please Sign in:</h1>
-				<p><label className="normal">Name: </label><input onChange={this.handleNameChange} type="text" ref="name" value={this.state.nameValue} disabled={this.state.submitting} /></p>
-				<p><label className="normal">Email: </label><input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
-				<p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
-				<p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
+			return React.DOM.form( {onSubmit:this.handleSignin, onChange:this.onChange}, 
+				React.DOM.h1(null, "Welcome! Please Sign in:"),
+				React.DOM.p(null, React.DOM.label( {className:"normal"}, "Name: " ),React.DOM.input( {onChange:this.handleNameChange, type:"text", ref:"name", value:this.state.nameValue, disabled:this.state.submitting} )),
+				React.DOM.p(null, React.DOM.label( {className:"normal"}, "Email: " ),React.DOM.input( {onChange:this.handleEmailChange, type:"text", value:this.state.emailValue, disabled:this.state.submitting} )),
+				React.DOM.p(null, React.DOM.label( {className:labelClass}, React.DOM.input( {type:"checkbox", ref:"mailinglist", disabled:this.state.submitting || ! validEmail, checked:this.state.mailinglistValue, onChange:this.handleCheckedChange} ), " Yes, please sign me up for updates from Tech Liminal!")),
+				React.DOM.p(null, React.DOM.input( {type:"submit", value:"Sign in!", disabled:this.state.submitting || ! hasName} ), " ", this.state.submitting ? React.DOM.img( {src:"/img/ajax-loader.gif"} ) : ''),
 				
-				<hr/>
-				<h2>Who else was here today?</h2>
-				<table>
-					<thead>
-						<tr><th>Date</th><th>Name</th><th>Email</th><th>Newsletter?</th></tr>
-					</thead>
-					<tbody>
-						{this.props.list.map(function(item) {
-							return <tr>
-											 <td>{item.day}&nbsp;{item.time}</td>
-											 <td>{item.name}</td>
-											 <td>{item.email}</td>
-											 <td>{item.mailinglist ? 'Yes' : 'No'}</td>
-										 </tr>
-						})}
-					</tbody>
-				</table>
-			</form>;
+				React.DOM.hr(null),
+				React.DOM.h2(null, "Who else was here today?"),
+				React.DOM.table(null, 
+					React.DOM.thead(null, 
+						React.DOM.tr(null, React.DOM.th(null, "Date"),React.DOM.th(null, "Name"),React.DOM.th(null, "Email"),React.DOM.th(null, "Newsletter?"))
+					),
+					React.DOM.tbody(null, 
+						this.props.list.map(function(item) {
+							return React.DOM.tr(null, 
+											 React.DOM.td(null, item.day," ",item.time),
+											 React.DOM.td(null, item.name),
+											 React.DOM.td(null, item.email),
+											 React.DOM.td(null, item.mailinglist ? 'Yes' : 'No')
+										 )
+						})
+					)
+				)
+			);
 		}
 	})
 	React.renderComponent(
-		<SigninForm list={JSON.parse(localStorage.getItem(todaysKey()) || '[]')}/>,
+		SigninForm( {list:JSON.parse(localStorage.getItem(todaysKey()) || '[]')}),
 		document.getElementById('form')
 	);
