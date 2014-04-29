@@ -112,7 +112,8 @@
 				)
 			);
 		}
-	})
+	});
+	
 	React.renderComponent(
 		SigninForm( {list:JSON.parse(localStorage.getItem(todaysKey()) || '[]')}),
 		document.getElementById('form')
