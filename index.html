@@ -45,18 +45,19 @@
         margin-top: 5px;
       }
       input[type="text"]{
-      	width:90%;
+      	width:100%;
       	display:block;
-      	padding:10px;
-      	font-size:1rem;
+      	padding:12px;
+      	font-size:1.1rem;
       }
       input[type="submit"] {
         border: 0;
         background: #68acdf;
         border-radius: 3px;
-        padding: 8px 10px;
-        font-size: 100%;
+        padding: 20px 30px;
+        font-size: 1.5rem;
         color: white;
+        width:50%;
       }
       input[type="submit"]:disabled {
         background: #abcdef;
@@ -163,6 +164,9 @@
             <p><label className="normal">Email: </label><input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
             <p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
             <p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
+            
+            <hr/>
+            <h2>Who else was here today?</h2>
             <table>
               <thead>
                 <tr><th>Date</th><th>Name</th><th>Email</th><th>Newsletter?</th></tr>
