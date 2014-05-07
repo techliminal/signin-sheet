@@ -45,7 +45,7 @@
 				time: [now.getHours(), ("0"+now.getMinutes()).substr(-2,2), ("0"+now.getSeconds()).substr(-2, 2)].join(':'),
 				name: data.nameValue,
 				email: data.emailValue,
-				newsletter: data.mailinglistVale
+				newsletter: data.mailinglistValue
 			});
 			localStorage.setItem(key, JSON.stringify(dataList));
 			this.setProps({list: dataList});
