@@ -89,7 +89,7 @@
 			return <form onSubmit={this.handleSignin} onChange={this.onChange}>
 				<h1>Welcome! Please Sign in:</h1>
 				<p><label className="normal">Name: </label><input onChange={this.handleNameChange} type="text" ref="name" value={this.state.nameValue} disabled={this.state.submitting} /></p>
-				<p><label className="normal">Email: </label><input onChange={this.handleEmailChange} type="text" value={this.state.emailValue} disabled={this.state.submitting} /></p>
+				<p><label className="normal">Email: </label><input onChange={this.handleEmailChange} type="email" value={this.state.emailValue} disabled={this.state.submitting} /></p>
 				<p><label className={labelClass}><input type="checkbox" ref="mailinglist" disabled={this.state.submitting || ! validEmail} checked={this.state.mailinglistValue} onChange={this.handleCheckedChange} /> Yes, please sign me up for updates from Tech Liminal!</label></p>
 				<p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
 				
