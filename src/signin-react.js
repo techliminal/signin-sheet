@@ -45,7 +45,7 @@
 				time: [now.getHours(), ("0"+now.getMinutes()).substr(-2,2), ("0"+now.getSeconds()).substr(-2, 2)].join(':'),
 				name: data.nameValue,
 				email: data.emailValue,
-				newsletter: data.mailinglistVale
+				newsletter: data.mailinglistValue
 			});
 			localStorage.setItem(key, JSON.stringify(dataList));
 			this.setProps({list: dataList});
@@ -94,6 +94,7 @@
 				<p><input type="submit" value="Sign in!" disabled={this.state.submitting || ! hasName} /> {this.state.submitting ? <img src="/img/ajax-loader.gif" /> : ''}</p>
 				
 				<hr/>
+				<p><a href="http://techliminal.com/get-notifications/">Sign up to get updates about what happens here</a></p>
 				<h2>Who else was here today?</h2>
 				<table>
 					<thead>
